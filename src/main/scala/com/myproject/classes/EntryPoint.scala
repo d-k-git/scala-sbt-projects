@@ -12,6 +12,7 @@ class EntryPoint extends App with LightBendConf {
     .enableHiveSupport()
     .getOrCreate()
 
+
   val jobConfig = appProps(spark.sparkContext.appName)
 
 

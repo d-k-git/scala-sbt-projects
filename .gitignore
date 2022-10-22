@@ -1,9 +1,0 @@
-.idea/*
-.bsp/*
-target/*
-project/*
-*.iml
-.gitkeep/*
-
-!project/build.properties
-!project/plugins.sbt

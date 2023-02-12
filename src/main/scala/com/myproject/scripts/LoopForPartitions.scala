@@ -28,39 +28,50 @@ object LoopForPartitions extends CustomParams {
   for (mondate <- partitionsList) {
 
 
-    val df = spark.table(tableName = "db_db.client_table")
-      .filter($"is_cancel" === "0" && $"snapshot_month" === mondate)
-      .select(
-        col("record_id").as("client_id"),
-        col("bon"),
-        col("snapshot_timestamp"),
-        trunc(col("create_date"), "month").as("create_date"))
-      .withColumn("delete_date", lit(null))
-      .distinct()
+    // Checking if the partition already exists
+
+    val lenOutTable = spark.table("db.out_table")
+      .filter($"mondate" === mondate).count
+
+    if (lenOutTable != 0) {
+
+      println(s"=== Partition ${mondate} already exists ===")
+    }
+
+    else {
+
+      val df = spark.table(tableName = "db_db.client_table")
+        .filter($"is_cancel" === "0" && $"snapshot_month" === mondate)
+        .select(
+          col("record_id").as("client_id"),
+          col("bon"),
+          col("snapshot_timestamp"),
+          trunc(col("create_date"), "month").as("create_date"))
+        .withColumn("delete_date", lit(null))
+        .distinct()
 
 
+      val windowSpec = Window.partitionBy(
+        df("client_id"))
+        .orderBy($"snapshot_timestamp".desc, $"delete_date".desc)
 
+      val outDF = df
+        .withColumn("row_number", row_number.over(windowSpec))
+        .withColumn("delete_date",
+          when(col("delete_date").isNull, "2099-01-01")
+            otherwise col("delete_date"))
+        .select($"*")
+        .filter($"row_number" === 1)
 
-    val windowSpec = Window.partitionBy(
-      df("client_id")     )
-      .orderBy($"snapshot_timestamp".desc, $"delete_date".desc)
-
-    val outDF = df
-      .withColumn("row_number", row_number.over(windowSpec))
-      .withColumn("delete_date",
-        when(col("delete_date").isNull, "2099-01-01")
-          otherwise col("delete_date"))
-      .select($"*")
-      .filter($"row_number" === 1)
-
-    outDF
-      .write
-      .option("path", "/warehouse/tablespace/external/hive/db/out_table")
-      .partitionBy("mondate")
-      .format("parquet")
-      .mode(SaveMode.Append)
-      .saveAsTable("db.out_table")
-}
+      outDF
+        .write
+        .option("path", "/warehouse/tablespace/external/hive/db/out_table")
+        .partitionBy("mondate")
+        .format("parquet")
+        .mode(SaveMode.Append)
+        .saveAsTable("db.out_table")
+    }
+  }
   spark.stop()
 
 

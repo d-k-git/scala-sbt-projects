@@ -2,7 +2,7 @@ package com.myproject.scripts
 
 import org.rogach.scallop._
 
-class KafkaCustomArgs(arguments: Seq[String]) extends ScallopConf(arguments) {
+class KafkaConsumerArgs(arguments: Seq[String]) extends ScallopConf(arguments) {
     val KAFKA_USERNAME: ScallopOption[String] = opt[String](required = true, name = "kafka-username")
     val KAFKA_PASSWORD: ScallopOption[String] = opt[String](required = true, name = "kafka-password")
     val TRUSTSTORE_PASSWORD: ScallopOption[String] = opt[String](required = true, name = "truststore-password")

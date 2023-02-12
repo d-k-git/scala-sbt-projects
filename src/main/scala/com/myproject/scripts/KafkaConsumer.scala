@@ -9,7 +9,7 @@ import org.apache.spark.sql.streaming.{Trigger}
 
 object KafkaConsumer extends App {
 
-  val confs = new KafkaCustomArgs(args)
+  val confs = new KafkaConsumerArgs(args)
 
   val spark: SparkSession = SparkSession
     .builder()

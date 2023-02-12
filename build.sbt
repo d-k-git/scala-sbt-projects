@@ -9,17 +9,16 @@ val sparkVersion = "3.0.1"
 
 resolvers += "Nexus local" at "https://nexus-repo.com/repository/sbt_releases_/"
 
+
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
   "org.apache.spark" %% "spark-hive" % sparkVersion % "provided",
-  "com.typesafe" % "config" % "1.4.1",
-  "org.scalaj" %% "scalaj-http" % "2.4.2",
-  "io.circe" %% "circe-core" % "0.12.0-M3",
-  "io.circe" %% "circe-parser" % "0.12.0-M3",
-  "io.circe" %% "circe-generic" % "0.12.0-M3",
-
-)
+  "org.apache.spark" %% "spark-streaming" % sparkVersion,
+  "org.apache.spark" %% "spark-sql-kafka-0-10" % sparkVersion,
+  "org.apache.spark" %% "spark-avro" % sparkVersion,
+  "org.rogach" %% "scallop" % "3.5.1" % "provided",
+  "com.typesafe" % "config" % "1.4.1")
 
 
 

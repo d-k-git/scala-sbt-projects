@@ -1,6 +1,6 @@
-Repository contains full sbt-projects on Spark/Scala 
+# Repository contains full sbt-projects on Spark/Scala #
 
-**1. Kafka Consumer**
+### 1. KAFKA CONSUMER ###
 
 **Description**: The application connects to the Kafka topic,
 fetches data log, transforms it according to a task, then writes the final dataframe into HDFS/Hive.
@@ -9,7 +9,7 @@ Arguments and credentials are passed via Airflow dag.
 
 **Business value**: Delivering real-time data for analytics.
 
-**2. Loop for partitions**
+### 2. A LOOP FOR PARTITIONS ###
 
 **Description**: The application uploads historical data on partitions and appends new daily partitions
 Contains simple logic for checking already existing partitions.

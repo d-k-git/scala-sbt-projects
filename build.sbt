@@ -1,11 +1,11 @@
 name := "DataSets"
 
-version := "0.55.0"
+version := "0.1.0"
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.10"
 
-val sparkVersion = "2.3.2"
-val log4jVersion = "2.14.1"
+val sparkVersion = "3.0.1"
+
 
 resolvers += "Nexus local" at "https://nexus-repo.com/repository/sbt_releases_/"
 

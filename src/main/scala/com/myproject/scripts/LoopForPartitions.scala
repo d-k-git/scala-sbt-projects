@@ -1,18 +1,12 @@
 package com.myproject.scripts
 
 
-import org.apache.spark.sql.{SaveMode, SparkSession}
+import org.apache.spark.sql.{SaveMode}
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions.{col, lit, row_number, trim, trunc, when}
 
 
-object LoopForPartitions extends App {
-
-  val spark: SparkSession = SparkSession.builder().
-    config("spark.sql.parquet.writeLegacyFormat", "true").
-    enableHiveSupport().
-    getOrCreate()
-
+object LoopForPartitions extends CustomParams {
 
   import spark.implicits._
 
@@ -38,8 +32,7 @@ object LoopForPartitions extends App {
       .filter($"is_cancel" === "0" && $"snapshot_month" === mondate)
       .select(
         col("record_id").as("client_id"),
-        col("ban"),
-        col("ctn"),
+        col("bon"),
         col("snapshot_timestamp"),
         trunc(col("create_date"), "month").as("create_date"))
       .withColumn("delete_date", lit(null))
@@ -62,8 +55,9 @@ object LoopForPartitions extends App {
 
     outDF
       .write
-      .option("path", "/warehouse/tablespace/external/hive/db/table")
+      .option("path", "/warehouse/tablespace/external/hive/db/out_table")
       .partitionBy("mondate")
+      .format("parquet")
       .mode(SaveMode.Append)
       .saveAsTable("db.out_table")
 }

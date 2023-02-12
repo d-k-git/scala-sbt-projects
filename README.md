@@ -1,4 +1,4 @@
-# Repository contains full sbt-projects on Spark/Scala #
+#### Repository contains full sbt-projects on Spark/Scala ####
 
 ### 1. KAFKA CONSUMER ###
 
